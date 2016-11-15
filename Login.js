@@ -72,6 +72,7 @@ export default class Login extends Component {
       console.log(results);
       console.log(results.success);
       if(results.success) {
+
         this.props.onLogin();
       }
     });

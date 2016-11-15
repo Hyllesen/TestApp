@@ -14,12 +14,13 @@ class TestApp extends Component {
     this.state = {
       isLoggedIn: false
     };
+    this.onLogin = this.onLogin.bind(this);
   }
 
   render() {
     if(this.state.isLoggedIn) {
       return (
-        <View>
+        <View style={styles.container}>
           <Text>Logged in!</Text>
         </View>
       )
@@ -34,5 +35,15 @@ class TestApp extends Component {
     console.log(' logged in! showdifferent view');
   }
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    paddingTop: 40,
+    alignItems: 'center',
+    backgroundColor: '#F5FCFF',
+    padding: 30
+  }
+});
 
 AppRegistry.registerComponent('TestApp', () => TestApp);
