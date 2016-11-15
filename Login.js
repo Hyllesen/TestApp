@@ -1,6 +1,9 @@
 import React, { Component } from 'react';
 import Async from 'async';
 import Buffer from 'buffer';
+
+import {AuthService} from './AuthService';
+
 import {
   AppRegistry,
   StyleSheet,
@@ -15,7 +18,6 @@ import {
 export default class Login extends Component {
   constructor(props) {
     super(props);
-
     this.state = {
       showProgress: false
     }
@@ -24,14 +26,10 @@ export default class Login extends Component {
   render() {
     let errorCtrl = <View />;
 
-    if(this.state.badCredentials) {
+    if(this.state.success === false) {
       errorCtrl = <Text style={styles.error}>
-        That username and password combination did not work
+        Could not log in
       </Text>
-    }
-
-    if(this.state.unknownError) {
-      errorCtrl = <Text style={styles.error}>We experienced an unknown error</Text>
     }
 
     return (
@@ -60,53 +58,23 @@ export default class Login extends Component {
     );
   }
 
-
-
-
   async onLoginPressed() {
-    console.log(`Atttempting to login with username ${this.state.username} and password ${this.state.password}`);
     this.setState({showProgress: true});
-    try {
-      let b = new Buffer.Buffer(this.state.username + ":" + this.state.password);
-      let encodedAuth = b.toString('base64');
-      let response = await fetch('https://api.github.com/user', {
-        headers: {
-          'Authorization' : 'Basic ' + encodedAuth
-        }
-      });
-      let responseJson = await response.json();
-      console.log(responseJson);
-      this.setState({showProgress: false});
-      return responseJson.movies;
-    } catch(error) {
-      console.error(error);
-    }
-    // fetch('https://api.github.com/user',{
-    //   headers: {
-    //     'Authorization' : 'Basic ' + encodedAuth
-    //   }
-    // })
-    // .then(() => {
-    //   if(response.status >= 200 && response.status < 300) {
-    //     return response;
-    //   }
-    //
-    //   throw {
-    //     badCredentials: response.status == 401,
-    //     unknownError: response.status != 401
-    //   }
-    // })
-    // .then((response) => {
-    //   return response.json();
-    // }).then((results) => {
-    //   this.setState({showProgress: false});
-    //   console.log(results);
-    // }).catch((err) => {
-    //   console.log('logon failed: ' + err);
-    //   this.setState(err);
-    // }).finally(() => {
-    //   this.setState({showProgress: false});
-    // });
+
+    let authService = new AuthService();
+    authService.login({
+      username: this.state.username,
+      password: this.state.password
+    }, (results) => {
+      this.setState(Object.assign({
+        showProgress: false
+      }, results));
+      console.log(results);
+      console.log(results.success);
+      if(results.success) {
+        this.props.onLogin();
+      }
+    });
   }
 }
 

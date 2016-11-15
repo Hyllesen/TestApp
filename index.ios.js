@@ -9,10 +9,29 @@ import {
 import Login from './Login';
 
 class TestApp extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      isLoggedIn: false
+    };
+  }
+
   render() {
-    return (
-      <Login/>
-    );
+    if(this.state.isLoggedIn) {
+      return (
+        <View>
+          <Text>Logged in!</Text>
+        </View>
+      )
+    } else {
+      return (
+        <Login onLogin={this.onLogin}/>
+      );
+    }
+  }
+  onLogin() {
+    this.setState({isLoggedIn: true});
+    console.log(' logged in! showdifferent view');
   }
 }
 
