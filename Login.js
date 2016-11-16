@@ -40,6 +40,7 @@ export default class Login extends Component {
           style={styles.input}
           onChangeText={(text) => this.setState({username: text})}
            placeholder="username"
+           autoCorrect={false}
            ></TextInput>
         <TextInput
           style={styles.input}

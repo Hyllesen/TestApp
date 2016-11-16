@@ -7,6 +7,8 @@ import {
 } from 'react-native';
 
 import Login from './Login';
+import AppContainer from './AppContainer';
+
 
 class TestApp extends Component {
   constructor(props) {
@@ -20,9 +22,7 @@ class TestApp extends Component {
   render() {
     if(this.state.isLoggedIn) {
       return (
-        <View style={styles.container}>
-          <Text>Logged in!</Text>
-        </View>
+        <AppContainer/>
       )
     } else {
       return (
