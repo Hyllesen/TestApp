@@ -2,8 +2,6 @@ import React, { Component } from 'react';
 import Async from 'async';
 import Buffer from 'buffer';
 
-import {AuthService} from './AuthService';
-
 import {
   AppRegistry,
   StyleSheet,
@@ -62,7 +60,7 @@ export default class Login extends Component {
   async onLoginPressed() {
     this.setState({showProgress: true});
 
-    let authService = new AuthService();
+    var authService = require('./AuthService');
     authService.login({
       username: this.state.username,
       password: this.state.password

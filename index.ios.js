@@ -3,23 +3,44 @@ import {
   AppRegistry,
   StyleSheet,
   Text,
-  View
+  View,
+  ActivityIndicator
 } from 'react-native';
 
 import Login from './Login';
 import AppContainer from './AppContainer';
 
+var AuthService = require('./AuthService');
 
 class TestApp extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      isLoggedIn: false
+      isLoggedIn: false,
+      checkingAuth: true
     };
     this.onLogin = this.onLogin.bind(this);
   }
 
+  componentDidMount() {
+    AuthService.getAuthInfo((err, authInfo) => {
+      this.setState({
+        checkingAuth: false,
+        isLoggedIn: authInfo != null
+      })
+    });
+  }
+
   render() {
+    if(this.state.checkingAuth) {
+      return (
+        <View style={styles.container}>
+          <ActivityIndicator animating={true}
+          size="large"/>
+        </View>
+      );
+    }
+
     if(this.state.isLoggedIn) {
       return (
         <AppContainer/>
@@ -43,7 +64,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: '#F5FCFF',
     padding: 30
-  }
+  },
+  loader: {
+  },
 });
 
 AppRegistry.registerComponent('TestApp', () => TestApp);
